@@ -3,13 +3,20 @@
  * Time complexity: O(n)                            *
  * Space complexity: O(n)                         ***/
 
-### 一些分类
+## Question Category
+
+### Dynamic Programming
+#### 1. 0-1 Backpack
+322, 377, 474, 139, 494
+
 
 字符串匹配动态规划问题：10, 44
 
 sliding window: 30, 76
 
 climbing stairs: 91, 70
+
+## Notes
 
 ### 1. Search Template
 1. Applicable for most searching problems;
