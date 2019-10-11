@@ -16,6 +16,10 @@ sliding window: 30, 76
 
 climbing stairs: 91, 70
 
+### Bits problem
+Count 1: 191
+Reverse bits: 190
+
 ## Notes
 
 ### 1. Search Template
