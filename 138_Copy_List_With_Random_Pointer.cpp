@@ -1,83 +1,98 @@
-/**
- * Definition for singly-linked list with a random pointer.
- * struct RandomListNode {
- *     int label;
- *     RandomListNode *next, *random;
- *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
- * };
- */
-class Solution {
+/*
+// Definition for a Node.
+class Node {
 public:
-    RandomListNode *copyRandomList(RandomListNode *head) {
-        unordered_map<RandomListNode*, RandomListNode*> myMap;
-        RandomListNode* old_next = head;
-        RandomListNode* new_dummy = new RandomListNode(0);
-        RandomListNode* new_next = new_dummy;
-        while(old_next) {
-            RandomListNode* tmp = new RandomListNode(old_next->label);
-            myMap.emplace(old_next, tmp);
-            new_next->next = tmp;
-            old_next = old_next->next;
-            new_next = new_next->next;
-        }
-        
-        old_next = head;
-        new_next = new_dummy->next;
-        while(old_next) {
-            new_next->random = myMap[old_next->random];
-            new_next = new_next->next;
-            old_next = old_next->next;
-        }
-        
-        return new_dummy->next;
+    int val;
+    Node* next;
+    Node* random;
+
+    Node() {}
+
+    Node(int _val, Node* _next, Node* _random) {
+        val = _val;
+        next = _next;
+        random = _random;
     }
 };
-
-
-/**
- * Definition for singly-linked list with a random pointer.
- * struct RandomListNode {
- *     int label;
- *     RandomListNode *next, *random;
- *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
- * };
- */
+*/
 class Solution {
 public:
-    RandomListNode *copyRandomList(RandomListNode *head) {
-        RandomListNode *oldNext = head;
-        RandomListNode *newHead, *newNext;
-        
+    Node* copyRandomList(Node* head) {
         if(head == NULL) {
             return NULL;
         }
         
+        Node* oldNext = head;
+        
         while(oldNext) {
-            newNext = new RandomListNode(oldNext->label);
-            newNext->next = oldNext->next;
-            oldNext->next = newNext;
+            Node* tmp = oldNext->next;
+            oldNext->next = new Node(oldNext->val, NULL, NULL);
+            oldNext->next->next = tmp;
             oldNext = oldNext->next->next;
         }
         
         oldNext = head;
         while(oldNext) {
             if(oldNext->random) {
-                oldNext->next->random = oldNext->random->next;
+                oldNext->next->random = oldNext->random->next;   
             }
             oldNext = oldNext->next->next;
         }
         
-        newHead = head->next;
         oldNext = head;
+        Node* newHead = head->next;
         while(oldNext) {
-            newNext = oldNext->next;
-            oldNext->next = newNext->next;
-            if(newNext->next) {
-                newNext->next = newNext->next->next;
+            Node* tmp = oldNext->next;
+            oldNext->next = tmp->next;
+            if(oldNext->next) {
+                tmp->next = oldNext->next->next;
             }
             oldNext = oldNext->next;
         }
         
         return newHead;
     }
+};
+
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+
+    Node() {}
+
+    Node(int _val, Node* _next, Node* _random) {
+        val = _val;
+        next = _next;
+        random = _random;
+    }
+};
+*/
+class Solution {
+public:
+    unordered_map<Node*, Node*> myMap;
+    Node* copyRandomList(Node* head) {
+        return helper(head);
+    }
+    
+    Node* helper(Node* node) {
+        if(node == NULL) {
+            return NULL;
+        }
+        if(myMap.find(node) != myMap.end()) {
+            return myMap[node];
+        }
+        
+        Node* newNode = new Node(node->val, NULL, NULL);
+        myMap[node] = newNode;
+        newNode->next = helper(node->next);
+        newNode->random = helper(node->random);
+        
+        return newNode;
+    }
+    
 };
